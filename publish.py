@@ -54,6 +54,12 @@ def main():
     caption = (d / "caption.txt").read_text(encoding="utf-8").strip()
     base = f"https://raw.githubusercontent.com/{REPO}/{BRANCH}/posts/{day}/"
     uid = ig_user_id()
+    if os.environ.get("DRY_RUN") == "1":
+        info = call("GET", uid, fields="username,media_count")
+        for name in imgs:
+            urllib.request.urlopen(base + name, timeout=30).read(10)
+        print(f"確認OK: {info} / {day} 画像{len(imgs)}枚・キャプション{len(caption)}字（投稿はしていません）")
+        return
     if len(imgs) == 1:
         cid = call("POST", f"{uid}/media", image_url=base + imgs[0], caption=caption)["id"]
     else:

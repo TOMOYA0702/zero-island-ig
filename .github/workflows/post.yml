@@ -7,6 +7,10 @@ on:
       date:
         description: "投稿する日（YYYY-MM-DD、空なら今日）"
         required: false
+      dry_run:
+        description: "確認だけ（投稿しない）なら 1"
+        required: false
+        default: "1"
 permissions:
   contents: write
 jobs:
@@ -19,6 +23,7 @@ jobs:
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           POST_DATE: ${{ github.event.inputs.date }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
         run: python3 publish.py
       - name: 投稿済みの記録を残す
         run: |

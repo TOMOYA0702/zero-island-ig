@@ -1,12 +1,12 @@
 name: Instagram 自動投稿
 on:
   schedule:
-    # 毎日 18:45 JST から予備を含めて4回起動。GitHubの定時実行は遅れたり飛ばされたりするため。
-    # 投稿済みの日は posted.json で止まるので、二重投稿はしない。
-    - cron: "45 9 * * *"
-    - cron: "5 10 * * *"
-    - cron: "25 10 * * *"
-    - cron: "50 10 * * *"
+    # GitHubの定時実行は数時間遅れることがある（11/17・18は約9時間遅れ）。
+    # 毎時動かし、日本時間18〜23時台に来た最初の1回だけが投稿する（投稿済みの日は posted.json で止まる）。
+    - cron: "10 * * * *"
+  push:
+    branches: [main]
+    paths: [".github/workflows/post.yml", "posts/**/caption.txt"]
   workflow_dispatch:
     inputs:
       date:

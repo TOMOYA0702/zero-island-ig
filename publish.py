@@ -46,8 +46,8 @@ def wait_ready(cid):
 def main():
     now = datetime.datetime.now(JST)
     # 定時実行がGitHub側で何時間も遅れて動くことがある（11/17分が翌3:45に動いた）。
-    # 定時実行のときは、日本時間18時〜23時台のあいだだけ投稿する。
-    if os.environ.get("EVENT") == "schedule" and not (18 <= now.hour <= 23):
+    # 手動実行以外は、日本時間18時〜23時台のあいだだけ投稿する。
+    if os.environ.get("EVENT") != "workflow_dispatch" and not (18 <= now.hour <= 23):
         print(f"{now:%m/%d %H:%M} JST：投稿時間外なので何もしません"); return
     day = os.environ.get("POST_DATE") or now.strftime("%Y-%m-%d")
     d = pathlib.Path("posts") / day
